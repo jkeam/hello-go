@@ -20,6 +20,9 @@ spec:
     - name: DOCKERFILE
       type: string
       description: Dockerfile location
+    - name: DEV_PROJECT
+      type: string
+      description: Project name for dev
   results:
     - name: APP_IMAGE_DIGEST
       description: The image digest built in the pipeline
@@ -80,16 +83,17 @@ spec:
     workspaces:
     - name: source
       workspace: workspace
-  - name: oc-deploy
+  - name: deploy-dev
     runAfter:
       - build-image
     taskRef:
       name: openshift-client
+      kind: ClusterTask
     workspaces:
       - name: manifest-dir
         workspace: workspace
     params:
       - name: SCRIPT
         value: |
-          cat pipeline/deploy.yaml | sed 's/latest/jon/' > deployment.yaml
-          oc apply --filename ./deployment.yaml
+          cat pipeline/deploy.yaml | sed "s/\:latest/@$(tasks.build-image.results.IMAGE_DIGEST)/" > deployment.yaml
+          oc apply --filename ./deployment.yaml -n $(params.DEV_PROJECT)
