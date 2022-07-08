@@ -20,6 +20,10 @@ spec:
     - name: DOCKERFILE
       type: string
       description: Dockerfile location
+  results:
+    - name: APP_IMAGE_DIGEST
+      description: The image digest built in the pipeline
+      value: $(tasks.build-image.results.IMAGE_DIGEST)
   workspaces:
   - name: workspace
   tasks:
