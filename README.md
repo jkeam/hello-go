@@ -1,4 +1,4 @@
-# Hello Go
+# Hello Gdockerfiles/o
 Very simple hello world server in go.
 
 ## Podman/Docker
@@ -8,7 +8,7 @@ This uses a container that has golang tools installed in it to build the golang 
 
 #### Build
 ```
-podman build -t hello-go .
+podman build -f ./dockerfiles/Dockerfile -t hello-go .
 ```
 
 #### Run
@@ -22,7 +22,7 @@ This produces smaller containers, but you will need to have golang tools install
 #### Build
 ```
 make
-podman build -f ./Dockerfile.slim -t hello-go .
+podman build -f ./dockerfiles/Dockerfile.slim -t hello-go .
 ```
 
 #### Run
