@@ -80,3 +80,16 @@ spec:
     workspaces:
     - name: source
       workspace: workspace
+  - name: oc-deploy
+    runAfter:
+      - build-image
+    taskRef:
+      name: openshift-client
+    workspaces:
+      - name: manifest-dir
+        workspace: workspace
+    params:
+      - name: SCRIPT
+        value: |
+          cat pipeline/deploy.yaml | sed 's/latest/jon/' > deployment.yaml
+          oc apply --filename ./deployment.yaml

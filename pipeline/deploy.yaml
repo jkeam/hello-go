@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-go
+  labels:
+    app: hello-go
+spec:
+  selector:
+    matchLabels:
+      app: hello-go
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hello-go
+    spec:
+      containers:
+        - image: image-registry.openshift-image-registry.svc:5000/hello-cicd/hello-go:latest
+          name: hello-go
+          ports:
+          - containerPort: 8080
+            name: theport
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-go
+  labels:
+    app: hello-go
+spec:
+  ports:
+    - name: port8080
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: hello-go
+  type: LoadBalancer
+
+---
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hello-go
+  labels:
+    app: hello-go
+spec:
+  path: /
+  to:
+    kind: Service
+    name: hello-go
+    weight: 100
+  port:
+    targetPort: port8080
