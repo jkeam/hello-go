@@ -9,4 +9,4 @@ run:
 
 .PHONY: clean
 clean:
-	go clean
+	rm -rf ./bin/*
