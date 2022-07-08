@@ -1,8 +1,8 @@
 FROM registry.access.redhat.com/ubi9/ubi-micro@sha256:b1b860b5d4bdec419cdbdd96c91ffb2ba584016ea01c380252130b1fbd33ac3f
 
 WORKDIR /go/src/app
-COPY ./bin/hello-go-linux-amd64 .
+COPY ./hello-go .
 
 USER nobody
 EXPOSE 8080
-CMD ["./hello-go-linux-amd64"]
+CMD ["./hello-go"]

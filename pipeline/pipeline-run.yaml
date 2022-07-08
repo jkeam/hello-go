@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: hello-build-
+spec:
+  serviceAccountName: 'pipeline'
+  pipelineRef:
+    name: hello-build
+  params:
+    - name: APP_SOURCE_GIT
+      value: https://github.com/jkeam/hello-go
+    - name: PACKAGE_NAME
+      value: github.com/jkeam/hello-go
+    - name: APP_NAME
+      value: hello-go
+    - name: DOCKERFILE
+      value: "./dockerfiles/Dockerfile.slim"
+  workspaces:
+  - name: workspace
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        volumeMode: Filesystem

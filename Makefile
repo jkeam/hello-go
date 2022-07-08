@@ -1,7 +1,6 @@
 .PHONY: build
 build: clean
-	GOOS=linux GOARCH=amd64 go build -o bin/hello-go-linux-amd64 main.go
-	GOOS=darwin GOARCH=amd64 go build -o bin/hello-go-mac-amd64 main.go
+	GOOS=linux GOARCH=amd64 go build -o hello-go main.go
 
 .PHONY: run
 run:
@@ -9,4 +8,4 @@ run:
 
 .PHONY: clean
 clean:
-	rm -rf ./bin/*
+	rm -rf ./hello-go

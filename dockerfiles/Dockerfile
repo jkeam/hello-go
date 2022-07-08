@@ -8,4 +8,4 @@ RUN make
 
 USER nobody
 EXPOSE 8080
-CMD ["./bin/hello-go-linux-amd64"]
+CMD ["./hello-go"]
