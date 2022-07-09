@@ -29,3 +29,12 @@ podman build -f ./dockerfiles/Dockerfile.slim -t hello-go .
 ```
 podman run --rm --name hello-go -p 8080:8080 hello-go
 ```
+
+### OpenShift
+```
+oc new-project hello-dev
+oc new-project hello-cicd
+oc policy add-role-to-user edit system:serviceaccount:hello-cicd:pipeline -n hello-dev
+oc policy add-role-to-user system:image-puller system:serviceaccount:hello-dev:default -n hello-cicd
+oc apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/golang-test/0.2/golang-test.yaml
+```
