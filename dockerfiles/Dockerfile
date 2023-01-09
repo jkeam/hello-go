@@ -1,5 +1,6 @@
 FROM registry.access.redhat.com/ubi9/go-toolset@sha256:f925b0f9b6fbb8e445ba00cb671a2c7379c24381a9b75fa8a3abef37a2a6a7a0 AS builder
 
+USER root
 WORKDIR /go/src/app
 COPY main.go go.mod Makefile ./
 
