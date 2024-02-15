@@ -49,7 +49,7 @@ oc new-project hello-dev
 oc new-project hello-cicd
 oc policy add-role-to-user edit system:serviceaccount:hello-cicd:pipeline -n hello-dev
 oc policy add-role-to-user system:image-puller system:serviceaccount:hello-dev:default -n hello-cicd
-oc apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/golang-test/0.2/golang-test.yaml -n hello-cicd
+oc apply -f ./pipeline/golang-test-task.yaml -n hello-cicd
 oc apply -f ./pipeline/golang-build-clustertask.yaml -n hello-cicd
 ```
 
