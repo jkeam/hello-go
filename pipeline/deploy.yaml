@@ -16,11 +16,18 @@ spec:
         app: hello-go
     spec:
       containers:
-        - image: image-registry.openshift-image-registry.svc:5000/hello-cicd/hello-go:latest
-          name: hello-go
+        - name: hello-go
+          image: image-registry.openshift-image-registry.svc:5000/hello-cicd/hello-go:latest
           ports:
           - containerPort: 8080
             name: theport
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
       restartPolicy: Always
 
 ---

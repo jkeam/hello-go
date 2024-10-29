@@ -77,7 +77,7 @@ spec:
       - build-binary
     params:
     - name: IMAGE
-      value: quay.io/jkeam1/$(params.APP_NAME)
+      value: REPLACE_IMAGE_NAME_HERE
     - name: DOCKERFILE
       value: "$(params.DOCKERFILE)"
     workspaces:
