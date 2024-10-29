@@ -45,12 +45,23 @@ These are the instructions to be able to run the pipeline created in this
 [video](https://people.redhat.com/~jkeam/#/pipelines) named `Pipeline Demo`.
 
 ```shell
+# create projects
 oc new-project hello-dev
 oc new-project hello-cicd
+
+# update service account permissions
 oc policy add-role-to-user edit system:serviceaccount:hello-cicd:pipeline -n hello-dev
 oc policy add-role-to-user system:image-puller system:serviceaccount:hello-dev:default -n hello-cicd
+
+# Create tasks
 oc apply -f ./pipeline/golang-test-task.yaml -n hello-cicd
 oc apply -f ./pipeline/golang-build-clustertask.yaml -n hello-cicd
+
+# Create pipeline
+oc apply -f ./pipeline/pipeline.yaml
+
+# Run pipeline
+oc create -f ./pipeline/pipeline-run.yaml
 ```
 
 #### Quay
