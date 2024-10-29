@@ -45,11 +45,11 @@ These are the instructions to be able to run the pipeline created in this
 [video](https://people.redhat.com/~jkeam/#/pipelines) named `Pipeline Demo`.
 
 ```shell
-# create projects
+# Create projects
 oc new-project hello-dev
 oc new-project hello-cicd
 
-# update service account permissions
+# Update service account permissions
 oc policy add-role-to-user edit system:serviceaccount:hello-cicd:pipeline -n hello-dev
 oc policy add-role-to-user system:image-puller system:serviceaccount:hello-dev:default -n hello-cicd
 
@@ -66,7 +66,7 @@ oc create -f ./pipeline/pipeline-run.yaml
 
 #### Quay
 
-To push to quay instead of deploying, you can also edit the pipeline
+While completely optional, to push to quay instead of deploying, you can also edit the pipeline
 (pipeline/pipeline.yaml) to drop the `deploy-dev` command and update the `buildah`
 task to perform a push to some registry.  This is what is done in
 `pipeline/pipeline-to-quay.yaml`.  The quay repository is currently hardcoded,
