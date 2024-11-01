@@ -27,7 +27,7 @@ spec:
       name: commit
       type: string
   steps:
-    - image: 'docker.io/alpine/git:v2.26.2'
+    - image: 'docker.io/alpine/git:v2.45.2'
       name: git-clone
       resources: {}
       script: >
@@ -54,7 +54,7 @@ spec:
 
         cat kustomization.yaml
       workingDir: $(workspaces.workspace.path)
-    - image: 'docker.io/alpine/git:v2.26.2'
+    - image: 'docker.io/alpine/git:v2.45.2'
       name: git-commit
       resources: {}
       script: |

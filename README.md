@@ -94,7 +94,15 @@ oc patch serviceaccount pipeline -p '{"secrets": [{"name": "container-registry-s
 
 If you have OpenShift GitOps installed, we can use [hello-go-config](https://github.com/jkeam/hello-go-config) as a repo that ArgoCD uses to do deployments.
 
+First fork the [hello-go-config](https://github.com/jkeam/hello-go-config) and generate a GitHub token that has access to push commits to it.
+
 ```shell
+# Replace with GitHub token info and create secret
+oc apply -f ./pipeline/secret.yaml -n hello-cicd
+
+# Add to pipeline SA
+oc patch serviceaccount pipeline -p '{"secrets": [{"name": "github-credentials"}]}'
+
 # Create pipeline
 oc apply -f ./pipeline/pipeline-gitops.yaml -n hello-cicd
 
