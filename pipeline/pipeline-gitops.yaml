@@ -1,0 +1,114 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-gitops-build
+spec:
+  params:
+  - name: APP_SOURCE_GIT
+    type: string
+    description: The application git repository
+  - name: APP_SOURCE_REVISION
+    type: string
+    description: The application git branch or sha hash
+    default: main
+  - name: PACKAGE_NAME
+    type: string
+    description: The golang package name
+  - name: APP_NAME
+    type: string
+    description: The application name
+  - name: DOCKERFILE
+    type: string
+    description: Dockerfile location
+  - name: CONFIG_GIT_REPO
+    type: string
+    description: Git repo name for config project
+  - name: CONFIG_GIT_REVISION
+    default: main
+    type: string
+    description: Git repo branch for config project
+  - name: CONFIG_IMAGE_NAME
+    default: hello-go
+    type: string
+    description: Name of the image in the kustomization.yaml
+  results:
+  - name: APP_IMAGE_DIGEST
+    description: The image digest built in the pipeline
+    value: $(tasks.build-image.results.IMAGE_DIGEST)
+  workspaces:
+  - name: workspace
+  tasks:
+  - name: source-clone
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    - name: output
+      workspace: workspace
+    params:
+    - name: url
+      value: $(params.APP_SOURCE_GIT)
+    - name: revision
+      value: $(params.APP_SOURCE_REVISION)
+  - name: unit-tests
+    taskRef:
+      name: golang-test
+    runAfter:
+    - source-clone
+    workspaces:
+    - name: source
+      workspace: workspace
+    params:
+    - name: package
+      value: "$(params.PACKAGE_NAME)"
+    - name: packages
+      value: "./"
+  - name: build-binary
+    taskRef:
+      name: golang-build
+      kind: ClusterTask
+    runAfter:
+    - unit-tests
+    params:
+    - name: package
+      value: "$(params.PACKAGE_NAME)"
+    - name: packages
+      value: "./"
+    workspaces:
+    - name: source
+      workspace: workspace
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    runAfter:
+    - build-binary
+    params:
+    - name: IMAGE
+      value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.APP_NAME)
+    - name: DOCKERFILE
+      value: "$(params.DOCKERFILE)"
+    workspaces:
+    - name: source
+      workspace: workspace
+  - name: git-update-deployment
+    params:
+    - name: GIT_REPOSITORY
+      value: $(params.CONFIG_GIT_REPO)
+    - name: GIT_REF
+      value: $(params.CONFIG_GIT_REVISION)
+    - name: CURRENT_IMAGE
+      value: $(params.CONFIG_IMAGE_NAME)
+    - name: NEW_IMAGE
+      value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.APP_NAME)
+    - name: NEW_DIGEST
+      value: $(tasks.build-image.results.IMAGE_DIGEST)
+    - name: KUSTOMIZATION_PATH
+      value: base
+    runAfter:
+    - build-image
+    taskRef:
+      name: git-update-deployment
+    workspaces:
+    - name: workspace
+      workspace: workspace

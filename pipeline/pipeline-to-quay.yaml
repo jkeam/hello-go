@@ -20,9 +20,6 @@ spec:
     - name: DOCKERFILE
       type: string
       description: Dockerfile location
-    - name: DEV_PROJECT
-      type: string
-      description: Project name for dev
   results:
     - name: APP_IMAGE_DIGEST
       description: The image digest built in the pipeline

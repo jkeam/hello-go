@@ -13,7 +13,6 @@ metadata:
 spec:
   description: >-
     This Task is Golang task to test Go projects.
-
   params:
   - name: package
     description: package (and its children) under test
