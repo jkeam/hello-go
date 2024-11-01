@@ -2,9 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: git-update-deployment
-  namespace: spruce-pipelines
   labels:
-    app.kubernetes.io/instance: spruce-pipelines
     app.kubernetes.io/version: '0.2'
     operator.tekton.dev/provider-type: community
 spec:
