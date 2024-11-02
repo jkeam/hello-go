@@ -50,7 +50,7 @@ spec:
   - name: source
   steps:
   - name: build
-    image: registry.access.redhat.com/ubi9/go-toolset@sha256:2837f91fba7f07c112a6052a99912fc364fd7373fb94d60c22ca4d7a79f1e79d
+    image: registry.access.redhat.com/ubi9/go-toolset:1.21.13-2.1729776560
     workingDir: $(workspaces.source.path)
     script: |
       make
