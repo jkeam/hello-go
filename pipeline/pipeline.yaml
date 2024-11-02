@@ -58,7 +58,6 @@ spec:
   - name: build-binary
     taskRef:
       name: golang-build
-      kind: ClusterTask
     runAfter:
       - unit-tests
     params:

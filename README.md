@@ -56,7 +56,7 @@ oc policy add-role-to-user system:image-puller system:serviceaccount:hello-dev:d
 
 # Create tasks
 oc apply -f ./pipeline/golang-test-task.yaml -n hello-cicd
-oc apply -f ./pipeline/golang-build-clustertask.yaml -n hello-cicd
+oc apply -f ./pipeline/golang-build-task.yaml -n hello-cicd
 
 # Create pipeline
 oc apply -f ./pipeline/pipeline.yaml -n hello-cicd
