@@ -102,7 +102,7 @@ Next follow the README instructions in [hello-go-config](https://github.com/jkea
 oc apply -f ./pipeline/secret.yaml -n hello-cicd
 
 # Add to pipeline SA
-oc patch serviceaccount pipeline -p '{"secrets": [{"name": "github-credentials"}]}'
+oc patch serviceaccount pipeline -p '{"secrets": [{"name": "github-credentials"}]}' -n hello-cicd
 
 # Create task
 oc apply -f ./pipeline/git-update-deployment-task.yaml -n hello-cicd
