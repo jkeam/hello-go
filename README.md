@@ -57,7 +57,6 @@ oc policy add-role-to-user system:image-puller system:serviceaccount:hello-dev:d
 # Create tasks
 oc apply -f ./pipeline/golang-test-task.yaml -n hello-cicd
 oc apply -f ./pipeline/golang-build-clustertask.yaml -n hello-cicd
-oc apply -f ./pipeline/git-update-deployment-task.yaml -n hello-cicd
 
 # Create pipeline
 oc apply -f ./pipeline/pipeline.yaml -n hello-cicd
@@ -96,12 +95,17 @@ If you have OpenShift GitOps installed, we can use [hello-go-config](https://git
 
 First fork the [hello-go-config](https://github.com/jkeam/hello-go-config) and generate a GitHub token that has access to push commits to it.
 
+Next follow the README instructions in [hello-go-config](https://github.com/jkeam/hello-go-config) in order to set up the ArgoCD application.
+
 ```shell
 # Replace with GitHub token info and create secret
 oc apply -f ./pipeline/secret.yaml -n hello-cicd
 
 # Add to pipeline SA
 oc patch serviceaccount pipeline -p '{"secrets": [{"name": "github-credentials"}]}'
+
+# Create task
+oc apply -f ./pipeline/git-update-deployment-task.yaml -n hello-cicd
 
 # Create pipeline
 oc apply -f ./pipeline/pipeline-gitops.yaml -n hello-cicd
