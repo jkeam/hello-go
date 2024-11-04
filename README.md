@@ -97,17 +97,19 @@ First fork the [hello-go-config](https://github.com/jkeam/hello-go-config) and g
 
 Next follow the README instructions in [hello-go-config](https://github.com/jkeam/hello-go-config) in order to set up the ArgoCD application.
 
+Then come back here and do the following steps to finish setting up the pipeline.
+
 ```shell
 # Replace with GitHub token info and create secret
 oc apply -f ./pipeline/secret.yaml -n hello-cicd
 
-# Add to pipeline SA
+# Add secret to to pipeline service account
 oc patch serviceaccount pipeline -p '{"secrets": [{"name": "github-credentials"}]}' -n hello-cicd
 
 # Create task
 oc apply -f ./pipeline/git-update-deployment-task.yaml -n hello-cicd
 
-# Create pipeline
+# Create special gitops pipeline
 oc apply -f ./pipeline/pipeline-gitops.yaml -n hello-cicd
 
 # Run pipeline
