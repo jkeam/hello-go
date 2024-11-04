@@ -55,8 +55,8 @@ oc policy add-role-to-user edit system:serviceaccount:hello-cicd:pipeline -n hel
 oc policy add-role-to-user system:image-puller system:serviceaccount:hello-dev:default -n hello-cicd
 
 # Create tasks
-oc apply -f ./pipeline/golang-test-task.yaml -n hello-cicd
-oc apply -f ./pipeline/golang-build-task.yaml -n hello-cicd
+oc apply -f ./pipeline/tasks/golang-test-task.yaml -n hello-cicd
+oc apply -f ./pipeline/tasks/golang-build-task.yaml -n hello-cicd
 
 # Create pipeline
 oc apply -f ./pipeline/pipeline.yaml -n hello-cicd
@@ -101,17 +101,17 @@ Then come back here and do the following steps to finish setting up the pipeline
 
 ```shell
 # Replace with GitHub token info and create secret
-oc apply -f ./pipeline/secret.yaml -n hello-cicd
+oc apply -f ./pipeline/gitops/secret.yaml -n hello-cicd
 
 # Add secret to to pipeline service account
 oc patch serviceaccount pipeline -p '{"secrets": [{"name": "github-credentials"}]}' -n hello-cicd
 
 # Create task
-oc apply -f ./pipeline/git-update-deployment-task.yaml -n hello-cicd
+oc apply -f ./pipeline/gitops/git-update-deployment-task.yaml -n hello-cicd
 
 # Create special gitops pipeline
-oc apply -f ./pipeline/pipeline-gitops.yaml -n hello-cicd
+oc apply -f ./pipeline/gitops/pipeline-gitops.yaml -n hello-cicd
 
 # Run pipeline
-oc create -f ./pipeline/pipeline-gitops-run.yaml -n hello-cicd
+oc create -f ./pipeline/gitops/pipeline-gitops-run.yaml -n hello-cicd
 ```
