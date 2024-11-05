@@ -1,0 +1,10 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: hello-go
+spec:
+  serviceAccountName: pipeline
+  bindings:
+    - ref: hello-go
+  template:
+    ref: hello-go

@@ -115,3 +115,17 @@ oc apply -f ./pipeline/gitops/pipeline-gitops.yaml -n hello-cicd
 # Run pipeline
 oc create -f ./pipeline/gitops/pipeline-gitops-run.yaml -n hello-cicd
 ```
+
+#### Webhook
+
+To add a webhook, update the `APP_SOURCE_GIT` and `CONFIG_GIT_REPO` values in `./trigger/trigger-template.yaml` and then update apply it.
+
+```shell
+oc apply -k ./pipeline/trigger -n hello-cicd
+```
+
+And in the git repo, add the following url as a webhook on push events.
+
+```shell
+echo "http://$(oc get routes/el-hello-go -n hello-cicd -o jsonpath='{.spec.host}')"
+```

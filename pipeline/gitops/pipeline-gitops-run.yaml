@@ -3,20 +3,20 @@ kind: PipelineRun
 metadata:
   generateName: hello-gitops-build-
 spec:
-  serviceAccountName: 'pipeline'
+  serviceAccountName: pipeline
   pipelineRef:
     name: hello-gitops-build
   params:
     - name: APP_SOURCE_GIT
       value: https://github.com/jkeam/hello-go
+    - name: CONFIG_GIT_REPO
+      value: https://github.com/jkeam/hello-go-config
     - name: PACKAGE_NAME
       value: github.com/jkeam/hello-go
     - name: APP_NAME
       value: hello-go
     - name: DOCKERFILE
       value: "./dockerfiles/Dockerfile.slim"
-    - name: CONFIG_GIT_REPO
-      value: https://github.com/jkeam/hello-go-config
   workspaces:
   - name: workspace
     volumeClaimTemplate:
@@ -25,5 +25,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 5Gi
-        volumeMode: Filesystem
+            storage: 500Mi

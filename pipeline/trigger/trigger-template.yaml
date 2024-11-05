@@ -1,0 +1,43 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: hello-go
+spec:
+  params:
+  - name: git-repo-url
+    description: The git repository url
+  - name: git-revision
+    description: The git revision
+    default: pipelines-1.16
+  - name: git-repo-name
+    description: The name of the deployment to be created / patched
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1
+    kind: PipelineRun
+    metadata:
+      generateName: hello-gitops-build-
+    spec:
+      taskRunTemplate:
+        serviceAccountName: pipeline
+      pipelineRef:
+        name: hello-gitops-build
+      params:
+      - name: APP_SOURCE_GIT
+        value: https://github.com/jkeam/hello-go
+      - name: CONFIG_GIT_REPO
+        value: https://github.com/jkeam/hello-go-config
+      - name: PACKAGE_NAME
+        value: github.com/jkeam/hello-go
+      - name: APP_NAME
+        value: hello-go
+      - name: DOCKERFILE
+        value: "./dockerfiles/Dockerfile.slim"
+      workspaces:
+      - name: workspace
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 500Mi
